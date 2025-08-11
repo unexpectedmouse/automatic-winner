@@ -1,15 +1,12 @@
 [gd_scene load_steps=10 format=3 uid="uid://cb0o4sg087wcs"]
-[ext_resource type="Script" uid="uid://cofsv5wgqsm44" path="res://scripts/player.gd" id="1_3vyb7"]
-[ext_resource type="Script" uid="uid://cmnb50i20bpen" path="res://scripts/flashlight.gd" id="2_g2els"]
 
+[ext_resource type="Script" uid="uid://cofsv5wgqsm44" path="res://scripts/player.gd" id="1_3vyb7"]
 [ext_resource type="PackedScene" uid="uid://bjtqew5q67jyg" path="res://models/gun.blend" id="2_g2els"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_g2els"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qhqgy"]
 
-[node name="Player" type="CharacterBody3D" groups=["player"]]
-floor_max_angle = 1.0472
 [sub_resource type="Animation" id="Animation_qhqgy"]
 length = 0.001
 tracks/0/type = "value"
@@ -144,6 +141,8 @@ _data = {
 &"throw": SubResource("Animation_tuyoq")
 }
 
+[node name="Player" type="CharacterBody3D" groups=["player"]]
+floor_max_angle = 1.0472
 script = ExtResource("1_3vyb7")
 
 [node name="Kvas" parent="." instance=ExtResource("2_g2els")]
@@ -161,14 +160,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_qhqgy")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.77369, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
 [node name="SpotLight3D" type="SpotLight3D" parent="Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.579959, -0.413392, 0)
 light_volumetric_fog_energy = 16.0
 spot_range = 42.6391
 spot_angle = 35.6106
-script = ExtResource("2_g2els")
 
 [node name="Timer" type="Timer" parent="Camera3D/SpotLight3D"]
 wait_time = 10.0
@@ -180,14 +178,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9726, 0)
 light_energy = 0.4
 omni_range = 4.0
 
-[connection signal="timeout" from="Camera3D/SpotLight3D/Timer" to="Camera3D/SpotLight3D" method="_on_timer_timeout"]
-
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_fjrip")
 }
 playback_default_blend_time = 0.1
 
-[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_finished"]
+[connection signal="timeout" from="Camera3D/SpotLight3D/Timer" to="Camera3D/SpotLight3D" method="_on_timer_timeout"]
