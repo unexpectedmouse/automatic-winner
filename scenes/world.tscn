@@ -30,7 +30,7 @@ emission = Color(0.956863, 0.956863, 0, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_i7141"]
 
-[node name="world" type="Node3D"]
+[node name="World" type="Node3D"]
 script = ExtResource("1_qfnet")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
