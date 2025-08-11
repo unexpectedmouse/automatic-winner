@@ -2,8 +2,10 @@ extends CharacterBody3D
 
 @onready var camera: Camera3D = $Camera3D
 
-const speed = 2.5
+const speed = 4
 const jump_strength = 5.0
+
+@onready var flashlight = $Camera3D/SpotLight3D
 
 
 func _ready() -> void:
