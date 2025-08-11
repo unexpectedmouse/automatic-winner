@@ -1,0 +1,109 @@
+[gd_scene load_steps=3 format=3 uid="uid://6pn0jrpp1uwr"]
+
+[ext_resource type="Script" uid="uid://dho8jwdwytjct" path="res://connection_menu.gd" id="1_o413k"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_2ctx4"]
+font_size = 101
+
+[node name="ConnectionMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_o413k")
+
+[node name="KvasName" type="Label" parent="."]
+layout_mode = 0
+offset_left = 413.0
+offset_top = 99.0
+offset_right = 692.0
+offset_bottom = 237.0
+text = "квас"
+label_settings = SubResource("LabelSettings_2ctx4")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="KvasPanel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 387.0
+offset_top = 272.0
+offset_right = 731.0
+offset_bottom = 558.0
+
+[node name="PlayKvas" type="Label" parent="KvasPanel"]
+layout_mode = 0
+offset_left = 115.0
+offset_top = 12.0
+offset_right = 225.0
+offset_bottom = 35.0
+text = "играть в квас"
+horizontal_alignment = 1
+
+[node name="KvasAddress" type="LineEdit" parent="KvasPanel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -137.0
+offset_top = 54.0
+offset_right = 133.0
+offset_bottom = 85.0
+grow_horizontal = 2
+placeholder_text = "адрес кваса"
+alignment = 1
+
+[node name="KvasPort" type="LineEdit" parent="KvasPanel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -137.0
+offset_top = 101.0
+offset_right = 133.0
+offset_bottom = 132.0
+grow_horizontal = 2
+placeholder_text = "порт кваса"
+alignment = 1
+
+[node name="ConnectToKvas" type="Button" parent="KvasPanel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -142.0
+offset_right = 149.0
+offset_bottom = -106.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "подключиться к квасовому серверу"
+
+[node name="OrLabel" type="Label" parent="KvasPanel"]
+layout_mode = 0
+offset_left = 148.0
+offset_top = 195.0
+offset_right = 188.0
+offset_bottom = 218.0
+text = "или"
+
+[node name="KvasServer" type="Button" parent="KvasPanel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -104.0
+offset_top = -57.0
+offset_right = 95.0
+offset_bottom = -21.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "запустить сервер кваса"
+
+[connection signal="pressed" from="KvasPanel/ConnectToKvas" to="." method="_on_connect_to_kvas_pressed"]
+[connection signal="pressed" from="KvasPanel/KvasServer" to="." method="_on_kvas_server_pressed"]
