@@ -6,7 +6,7 @@ var start_fading = false
 @onready var timer = $Timer
 
 func _process(delta: float) -> void:
-	if start_fading:
+	if start_fading and charge > 0:
 		charge-=speed*delta
 		light_energy = charge/100
 	if charge <= 0.1:
