@@ -1,9 +1,9 @@
 [gd_scene load_steps=10 format=3 uid="uid://ee3oeo2rgbtt"]
 
-[ext_resource type="Script" uid="uid://dun6wdaffv7tw" path="res://scripts/world.gd" id="1_qfnet"]
+[ext_resource type="Script" path="res://scripts/world.gd" id="1_qfnet"]
 [ext_resource type="PackedScene" uid="uid://iyvykwc3myjp" path="res://scenes/map.tscn" id="2_k0juu"]
 [ext_resource type="PackedScene" uid="uid://cb0o4sg087wcs" path="res://scenes/player.tscn" id="4_k0juu"]
-[ext_resource type="Script" uid="uid://dr17g88rn4t1t" path="res://scripts/charge_light.gd" id="5_71j4m"]
+[ext_resource type="Script" path="res://scripts/charge_light.gd" id="5_71j4m"]
 
 [sub_resource type="Sky" id="Sky_71j4m"]
 
