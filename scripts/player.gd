@@ -4,17 +4,18 @@ extends CharacterBody3D
 @onready var kvas_pos: Marker3D = $KvasPos
 @onready var camera: Camera3D = $Camera3D
 @onready var kvas: Node3D = $Kvas
-@onready var target: Node3D = get_node("/root/World")
+@onready var flashlight: SpotLight3D = $Camera3D/Flashlight
+@onready var omnilight: OmniLight3D = $OmniLight3D
+@onready var target: Node3D = get_tree().root.get_child(0)
 
 const weapon = preload("res://scenes/kvas.tscn")
 const speed = 4
-
 const jump_strength = 5.0
 const throw_force = 10.0
+const discharge_speed = 10
 
 var got_kvas := false
-
-@onready var flashlight = $Camera3D/SpotLight3D
+var flashlight_charge := 100.0
 
 
 func _ready() -> void:
@@ -23,6 +24,12 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	omnilight.light_energy = 1 - flashlight.light_energy
+	if flashlight_charge > 0:
+		flashlight_charge = move_toward(flashlight_charge, 0, discharge_speed * delta)
+	else:
+		flashlight.light_energy = move_toward(flashlight.light_energy, 0, 0.05)
+	
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
@@ -78,6 +85,11 @@ func throw_kvas():
 	var new_kvas: RigidBody3D = weapon.instantiate()
 	target.add_child(new_kvas)
 	new_kvas.global_position = kvas_pos.global_position
-	new_kvas.global_rotation = kvas_pos.global_rotation
-	new_kvas.linear_velocity = -camera.transform.basis.z.normalized() * throw_force
+	new_kvas.global_rotation = camera.global_rotation
+	new_kvas.linear_velocity = -camera.global_transform.basis.z.normalized() * throw_force
 	got_kvas = false
+
+
+func recharge_flashlight():
+	flashlight_charge = 100
+	flashlight.light_energy = 1

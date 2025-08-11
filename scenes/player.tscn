@@ -162,13 +162,13 @@ shape = SubResource("CapsuleShape3D_qhqgy")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
-[node name="SpotLight3D" type="SpotLight3D" parent="Camera3D"]
+[node name="Flashlight" type="SpotLight3D" parent="Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.579959, -0.413392, 0)
 light_volumetric_fog_energy = 16.0
 spot_range = 42.6391
 spot_angle = 35.6106
 
-[node name="Timer" type="Timer" parent="Camera3D/SpotLight3D"]
+[node name="FlashlightTimer" type="Timer" parent="Camera3D/Flashlight"]
 wait_time = 10.0
 one_shot = true
 autostart = true
@@ -184,4 +184,4 @@ libraries = {
 }
 playback_default_blend_time = 0.1
 
-[connection signal="timeout" from="Camera3D/SpotLight3D/Timer" to="Camera3D/SpotLight3D" method="_on_timer_timeout"]
+[connection signal="timeout" from="Camera3D/Flashlight/FlashlightTimer" to="Camera3D/Flashlight" method="_on_timer_timeout"]
