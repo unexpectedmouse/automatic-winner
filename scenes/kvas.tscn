@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://txko3n07btcf"]
+
+[ext_resource type="PackedScene" uid="uid://bjtqew5q67jyg" path="res://models/gun.blend" id="1_lp3y1"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cs4s8"]
+radius = 0.192003
+height = 0.718462
+
+[node name="RigidBody3D" type="RigidBody3D"]
+
+[node name="gun" parent="." instance=ExtResource("1_lp3y1")]
+transform = Transform3D(0.189869, 0, 0, 0, 0.189869, 0, 0, 0, 0.189869, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_cs4s8")

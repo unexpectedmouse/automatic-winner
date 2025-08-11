@@ -1,15 +1,25 @@
 extends CharacterBody3D
 
+@onready var animator: AnimationPlayer = $AnimationPlayer
+@onready var kvas_pos: Marker3D = $KvasPos
 @onready var camera: Camera3D = $Camera3D
+@onready var kvas: Node3D = $Kvas
+@onready var target: Node3D = get_node("/root/World")
 
+const weapon = preload("res://scenes/kvas.tscn")
 const speed = 4
+
 const jump_strength = 5.0
+const throw_force = 10.0
+
+var got_kvas := false
 
 @onready var flashlight = $Camera3D/SpotLight3D
 
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	get_kvas()
 
 
 func _physics_process(delta: float) -> void:
@@ -42,8 +52,32 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		rotate_y(-event.relative.x * 0.005)
 		camera.rotate_x(-event.relative.y * 0.005)
-	elif event is InputEventKey and event.is_action_pressed("ui_cancel"):
-		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		else:
-			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	elif event is InputEventKey:
+		if event.is_action_pressed("ui_cancel"):
+			if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+			else:
+				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	elif event is InputEventMouseButton:
+		if event.is_action_pressed("throw"):
+			if not got_kvas: return
+			animator.play("shake")
+		elif event.is_action_released("throw"):
+			if not got_kvas: return
+			animator.play("throw")
+
+
+func get_kvas():
+	got_kvas = true
+	animator.play("take")
+	kvas.show()
+
+
+func throw_kvas():
+	kvas.hide()
+	var new_kvas: RigidBody3D = weapon.instantiate()
+	target.add_child(new_kvas)
+	new_kvas.global_position = kvas_pos.global_position
+	new_kvas.global_rotation = kvas_pos.global_rotation
+	new_kvas.linear_velocity = -camera.transform.basis.z.normalized() * throw_force
+	got_kvas = false
