@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="Automatic Winner"
-run/main_scene="uid://ee3oeo2rgbtt"
+run/main_scene="uid://6pn0jrpp1uwr"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+G="*res://scripts/g.gd"
 
 [file_customization]
 

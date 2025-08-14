@@ -1,4 +1,5 @@
 extends CharacterBody3D
+class_name Player
 
 @onready var animator: AnimationPlayer = $AnimationPlayer
 @onready var kvas_pos: Marker3D = $KvasPos
@@ -6,25 +7,34 @@ extends CharacterBody3D
 @onready var kvas: Node3D = $Camera3D/Node3D/Kvas
 @onready var flashlight: SpotLight3D = $Camera3D/Flashlight
 @onready var omnilight: OmniLight3D = $OmniLight3D
-@onready var target: Node3D = get_tree().root.get_child(0)
+@onready var target: Node3D = get_tree().root.get_node("World")
+@onready var id_label: Label3D = $Label3D
 
 const weapon = preload("res://scenes/kvas.tscn")
 const speed = 4
 const jump_strength = 5.0
 const throw_force = 10.0
-const discharge_speed = 10
+const discharge_speed = 0.1
 
 var got_kvas := false
 var flashlight_charge := 100.0
 
 
+func _enter_tree() -> void:
+	set_multiplayer_authority(int(name))
+
+
 func _ready() -> void:
+	if not is_multiplayer_authority(): return
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	get_kvas()
+	camera.current = true
 
 
 func _physics_process(delta: float) -> void:
 	omnilight.light_energy = 1 - flashlight.light_energy
+
+	if not is_multiplayer_authority(): return
 	if flashlight_charge > 0:
 		flashlight_charge = move_toward(flashlight_charge, 0, discharge_speed * delta)
 	else:
@@ -56,6 +66,8 @@ func _physics_process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if not is_multiplayer_authority(): return
+	
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		rotate_y(-event.relative.x * 0.005)
 		camera.rotate_x(-event.relative.y * 0.005)
@@ -69,15 +81,35 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event.is_action_pressed("throw"):
 			if not got_kvas: return
 			animator.play("shake")
+			shake_kvas_anim.rpc()
 		elif event.is_action_released("throw"):
 			if not got_kvas: return
 			animator.play("throw")
+			throw_kvas_rpc.rpc()
 
 
 func get_kvas():
+	if not is_multiplayer_authority(): return
 	got_kvas = true
 	animator.play("take")
 	kvas.show()
+	get_kvas_anim.rpc()
+
+
+@rpc
+func get_kvas_anim():
+	animator.play("take")
+	kvas.show()
+
+
+@rpc
+func shake_kvas_anim():
+	animator.play("shake")
+
+
+@rpc
+func throw_kvas_rpc():
+	animator.play("throw")
 
 
 func throw_kvas():
@@ -87,9 +119,13 @@ func throw_kvas():
 	new_kvas.global_position = kvas_pos.global_position
 	new_kvas.global_rotation = camera.global_rotation
 	new_kvas.linear_velocity = -camera.global_transform.basis.z.normalized() * throw_force
+
+	if not is_multiplayer_authority(): return
 	got_kvas = false
 
 
 func recharge_flashlight():
+	if not is_multiplayer_authority(): return
+	
 	flashlight_charge = 100
 	flashlight.light_energy = 1

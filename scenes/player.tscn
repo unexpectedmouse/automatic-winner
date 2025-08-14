@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=4 uid="uid://cb0o4sg087wcs"]
+[gd_scene load_steps=19 format=4 uid="uid://cb0o4sg087wcs"]
 
 [ext_resource type="Script" uid="uid://cofsv5wgqsm44" path="res://scripts/player.gd" id="1_3vyb7"]
 [ext_resource type="Texture2D" uid="uid://bccuhc7pnfet0" path="res://textures/kvas.png" id="2_g2els"]
@@ -236,9 +236,28 @@ _data = {
 &"throw": SubResource("Animation_tuyoq")
 }
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_g2els"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("Camera3D/Flashlight:light_energy")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath("Camera3D:rotation")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+
 [node name="Player" type="CharacterBody3D" groups=["player"]]
 floor_max_angle = 1.0472
 script = ExtResource("1_3vyb7")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.25801, 0)
+billboard = 2
+text = "-"
 
 [node name="KvasPos" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.0356523, 0.999364, 0, -0.999364, 0.0356523, 0.601341, 1.06686, -0.718155)
@@ -284,7 +303,7 @@ mesh = SubResource("ArrayMesh_dqkch")
 skeleton = NodePath("")
 
 [node name="Decal" type="Decal" parent="Camera3D/Node3D/Kvas"]
-transform = Transform3D(-4.37085e-08, -1, 7.12295e-10, -0.0162949, 2.55074e-14, -0.999867, 0.999867, -4.37143e-08, -0.0162949, -0.344926, 0.139033, 0.298665)
+transform = Transform3D(-4.37085e-08, -1, 7.12295e-10, -0.0162949, 2.55074e-14, -0.999867, 0.999867, -4.37143e-08, -0.0162949, -0.344926, 0.139032, 0.298665)
 size = Vector3(1.41992, 1.64334, 1.52734)
 texture_albedo = ExtResource("2_g2els")
 upper_fade = 0.0163228
@@ -302,5 +321,8 @@ libraries = {
 &"": SubResource("AnimationLibrary_fjrip")
 }
 playback_default_blend_time = 0.1
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_g2els")
 
 [connection signal="timeout" from="Camera3D/Flashlight/FlashlightTimer" to="Camera3D/Flashlight" method="_on_timer_timeout"]
