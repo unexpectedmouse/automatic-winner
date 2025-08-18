@@ -14,7 +14,7 @@ const weapon = preload("res://scenes/kvas.tscn")
 const speed = 4
 const jump_strength = 5.0
 const throw_force = 10.0
-const discharge_speed = 0.1
+const discharge_speed = 1
 
 var got_kvas := false
 var flashlight_charge := 100.0
@@ -28,6 +28,13 @@ func set_pos(pos: Vector3):
 @rpc("any_peer")
 func set_group(group: String):
 	add_to_group(group)
+	id_label.text = group
+	if group == 'hunter':
+		get_kvas()
+	else:
+		kvas.queue_free()
+		animator.queue_free()
+		got_kvas = false
 
 
 func _enter_tree() -> void:
@@ -37,13 +44,12 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	if not is_multiplayer_authority(): return
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	get_kvas()
 	camera.current = true
 
 
 func _physics_process(delta: float) -> void:
 	omnilight.light_energy = 1 - flashlight.light_energy
-
+	
 	if not is_multiplayer_authority(): return
 	if flashlight_charge > 0:
 		flashlight_charge = move_toward(flashlight_charge, 0, discharge_speed * delta)

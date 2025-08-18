@@ -1,14 +1,114 @@
-[gd_scene load_steps=3 format=3 uid="uid://txko3n07btcf"]
+[gd_scene load_steps=16 format=3 uid="uid://txko3n07btcf"]
 
+[ext_resource type="Script" uid="uid://b6cstrbdvpmuj" path="res://scripts/kvas.gd" id="1_cs4s8"]
 [ext_resource type="PackedScene" uid="uid://cn3y3u227728c" path="res://scenes/kvas_scene.tscn" id="1_lp3y1"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cs4s8"]
 radius = 0.192003
 height = 0.718462
 
-[node name="RigidBody3D" type="RigidBody3D"]
+[sub_resource type="Gradient" id="Gradient_lp3y1"]
+offsets = PackedFloat32Array(0.608333, 0.658333)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_cs4s8"]
+gradient = SubResource("Gradient_lp3y1")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2ev1p"]
+render_priority = -1
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.188235, 0.129412, 0.0235294, 0.662745)
+albedo_texture = SubResource("GradientTexture2D_cs4s8")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Gradient" id="Gradient_cs4s8"]
+offsets = PackedFloat32Array(0, 0.2, 0.740741, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2ev1p"]
+gradient = SubResource("Gradient_cs4s8")
+
+[sub_resource type="Curve" id="Curve_lp3y1"]
+_data = [Vector2(0, 1), 0.0, -0.442829, 0, 0, Vector2(1, 0), -2.71012, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_cs4s8"]
+curve = SubResource("Curve_lp3y1")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lp3y1"]
+emission_shape = 1
+emission_sphere_radius = 0.26
+spread = 180.0
+initial_velocity_max = 3.0
+gravity = Vector3(0, -3, 0)
+scale_min = 0.5
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_cs4s8")
+color_ramp = SubResource("GradientTexture1D_2ev1p")
+sub_emitter_mode = 4
+sub_emitter_amount_at_start = 1
+sub_emitter_keep_velocity = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_cs4s8"]
+size = Vector2(0.2, 0.2)
+
+[sub_resource type="Gradient" id="Gradient_2ev1p"]
+offsets = PackedFloat32Array(0.608333, 0.658333)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_x6egi"]
+gradient = SubResource("Gradient_2ev1p")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kfoqd"]
+render_priority = -1
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.969879, 0.824544, 0.592535, 0.662745)
+albedo_texture = SubResource("GradientTexture2D_x6egi")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[node name="kvas" type="RigidBody3D"]
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_cs4s8")
 
 [node name="gun" parent="." instance=ExtResource("1_lp3y1")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_cs4s8")
+
+[node name="liquid" type="GPUParticles3D" parent="."]
+material_override = SubResource("StandardMaterial3D_2ev1p")
+emitting = false
+amount = 128
+sub_emitter = NodePath("../foam")
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_lp3y1")
+draw_pass_1 = SubResource("QuadMesh_cs4s8")
+
+[node name="foam" type="GPUParticles3D" parent="."]
+material_override = SubResource("StandardMaterial3D_kfoqd")
+emitting = false
+amount = 64
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_lp3y1")
+draw_pass_1 = SubResource("QuadMesh_cs4s8")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

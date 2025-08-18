@@ -12,11 +12,13 @@ var is_ready := false
 
 
 func update_ready() -> void:
-	ready_label.text = str(players_ready) + "/" + str(players_node.get_child_count())
-	
+	ready_label.text = 'нажмите ENTER, чтобы расквасится ' + str(players_ready) + "/" + str(players_node.get_child_count())
+	if players_ready == players_node.get_child_count():
+		ready_label.hide()
 	if multiplayer.get_unique_id() == 1 and players_ready == players_node.get_child_count():
 		set_player_role()
 		set_player_to_pos()
+		
 
 
 @rpc("any_peer")
@@ -32,21 +34,20 @@ func _input(event: InputEvent) -> void:
 		update_ready()
 		player_ready.rpc()
 
-
-func add_player():
-	#adding player to scene
-	pass
+func _ready() -> void:
+	ready_label.text = 'нажмите ENTER, чтобы раскваситься'
 
 
 func set_player_role():
-	var hunter_id = randi_range(0, players_node.get_child_count())
+	var hunter_id = randi_range(0, players_ready-1)
 	for player:CharacterBody3D in players_node.get_children():
 		if players_node.get_child(hunter_id) == player:
 			player.set_group.rpc("hunter")
-			player.add_to_group("hunter")
+			player.set_group('hunter')
 		else:
 			player.set_group.rpc("player")
-			player.add_to_group("player")
+			player.set_group('player')
+
 
 
 func set_player_to_pos():
