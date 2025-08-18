@@ -20,6 +20,16 @@ var got_kvas := false
 var flashlight_charge := 100.0
 
 
+@rpc("any_peer")
+func set_pos(pos: Vector3):
+	global_position = pos
+
+
+@rpc("any_peer")
+func set_group(group: String):
+	add_to_group(group)
+
+
 func _enter_tree() -> void:
 	set_multiplayer_authority(int(name))
 

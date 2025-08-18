@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://ee3oeo2rgbtt"]
 
-[ext_resource type="Script" path="res://scripts/world.gd" id="1_qfnet"]
+[ext_resource type="Script" uid="uid://dun6wdaffv7tw" path="res://scripts/world.gd" id="1_qfnet"]
 [ext_resource type="PackedScene" uid="uid://iyvykwc3myjp" path="res://scenes/map.tscn" id="2_k0juu"]
 [ext_resource type="Script" uid="uid://dr17g88rn4t1t" path="res://scripts/charge_light.gd" id="5_71j4m"]
 
@@ -121,5 +121,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.27379, 17.7168, -13.1196)
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://cb0o4sg087wcs")
 spawn_path = NodePath("../players")
+
+[node name="ReadyPlayers" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
 
 [connection signal="body_entered" from="charge_light" to="charge_light" method="_on_body_entered"]
