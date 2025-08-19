@@ -13,7 +13,6 @@ class_name Player
 @onready var eye_2: MeshInstance3D = $eye2
 
 
-
 const weapon = preload("res://scenes/kvas.tscn")
 const speed = 4
 const jump_strength = 5.0
@@ -22,6 +21,14 @@ const discharge_speed = 1
 
 var got_kvas := false
 var flashlight_charge := 100.0
+@export var health := 100
+
+
+func hit(damage: int):
+	if not is_multiplayer_authority(): return
+	health -= damage
+	if health <= 0:
+		queue_free()
 
 
 @rpc("any_peer")
@@ -70,6 +77,7 @@ func get_nearest_player():
 	return nearest
 
 func _physics_process(delta: float) -> void:
+	id_label.text = str(health)
 	omnilight.light_energy = 1 - flashlight.light_energy
 	
 	rotate_eyes_to(get_nearest_player())
