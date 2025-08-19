@@ -9,6 +9,10 @@ class_name Player
 @onready var omnilight: OmniLight3D = $OmniLight3D
 @onready var target: Node3D = get_tree().root.get_node("World")
 @onready var id_label: Label3D = $Label3D
+@onready var eye: MeshInstance3D = $eye
+@onready var eye_2: MeshInstance3D = $eye2
+
+
 
 const weapon = preload("res://scenes/kvas.tscn")
 const speed = 4
@@ -43,14 +47,34 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	if not is_multiplayer_authority(): return
+	eye.hide()
+	eye_2.hide()
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = true
+	
+	#min_dist = G.players_position[name]
 
+var poses = []
+var min_dist = null
+
+func get_nearest_player():
+	var nearest:CharacterBody3D = null
+	var min_dist = null
+	
+	for player:CharacterBody3D in get_tree().get_nodes_in_group('kvasoman'):
+		if player != self:
+			var dist_to_player = global_position.distance_to(player.global_position)
+			if min_dist == null or dist_to_player<min_dist:
+				min_dist = dist_to_player
+				nearest = player
+	return nearest
 
 func _physics_process(delta: float) -> void:
 	omnilight.light_energy = 1 - flashlight.light_energy
 	
+	rotate_eyes_to(get_nearest_player())
 	if not is_multiplayer_authority(): return
+	
 	if flashlight_charge > 0:
 		flashlight_charge = move_toward(flashlight_charge, 0, discharge_speed * delta)
 	else:
@@ -145,3 +169,18 @@ func recharge_flashlight():
 	
 	flashlight_charge = 100
 	flashlight.light_energy = 1
+
+
+func rotate_eyes_to(player:CharacterBody3D):
+	#if not is_multiplayer_authority(): return
+	if player != null:
+		var pos = player.global_position
+		
+		#eye.global_rotation.abs()
+		#eye.transform = lerp(eye.transform, eye.transform.looking_at(Vector3(pos.x, pos.y + 1.477, pos.z),Vector3.UP, true), 0.1)
+		#eye_2.transform = eye.transform
+		##eye_2.transform = lerp(eye_2.transform, eye_2.transform.looking_at(Vector3(pos.x, pos.y + 1.477, pos.z)), 0.1)
+		#
+		##player.transform.looking_at()
+		eye.look_at(Vector3(pos.x, pos.y + 1.477, pos.z))
+		eye_2.look_at(Vector3(pos.x, pos.y + 1.477, pos.z))

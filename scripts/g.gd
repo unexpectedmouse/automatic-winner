@@ -6,6 +6,9 @@ var player_scene := preload("res://scenes/player.tscn")
 var peer := ENetMultiplayerPeer.new()
 var world: Node3D
 
+var players_position = {
+	
+}
 
 func create_kvas_server():
 	peer.create_server(12345)
