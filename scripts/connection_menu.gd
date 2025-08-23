@@ -15,3 +15,7 @@ func _on_connect_to_kvas_pressed() -> void:
 
 func _on_kvas_server_pressed() -> void:
 	G.create_kvas_server()
+
+
+func _on_settings_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/settings_menu.tscn")

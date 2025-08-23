@@ -10,6 +10,9 @@ var players_position = {
 	
 }
 
+
+
+
 func create_kvas_server():
 	peer.create_server(12345)
 	multiplayer.multiplayer_peer = peer

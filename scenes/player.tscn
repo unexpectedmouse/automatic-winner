@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=4 uid="uid://cb0o4sg087wcs"]
+[gd_scene load_steps=23 format=4 uid="uid://cb0o4sg087wcs"]
 
 [ext_resource type="Script" uid="uid://cofsv5wgqsm44" path="res://scripts/player.gd" id="1_3vyb7"]
 [ext_resource type="Texture2D" uid="uid://bccuhc7pnfet0" path="res://textures/kvas.png" id="2_g2els"]
@@ -103,6 +103,10 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_aa7wf")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g2els"]
+albedo_color = Color(0, 0, 0, 1)
+roughness = 0.33
 
 [sub_resource type="Animation" id="Animation_qhqgy"]
 length = 0.001
@@ -297,11 +301,11 @@ shape = SubResource("CapsuleShape3D_qhqgy")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
 [node name="Flashlight" type="SpotLight3D" parent="Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.397974, -0.313402, 0)
-light_volumetric_fog_energy = 16.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.500481, -0.358038, -0.182788)
+light_volumetric_fog_energy = 5.0
 shadow_enabled = true
-spot_range = 42.6391
-spot_angle = 35.6106
+spot_range = 21.8046
+spot_angle = 32.7895
 
 [node name="FlashlightTimer" type="Timer" parent="Camera3D/Flashlight"]
 wait_time = 10.0
@@ -336,6 +340,26 @@ upper_fade = 0.0163228
 lower_fade = 3.89881
 cull_mask = 1047554
 
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.5, -0.358, -0.324108)
+material_override = SubResource("StandardMaterial3D_g2els")
+cast_shadow = 0
+radius = 0.0493164
+height = 0.329102
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Camera3D/CSGCylinder3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.154488, 0)
+cast_shadow = 0
+radius = 0.0639648
+height = 0.184662
+
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="Camera3D/CSGCylinder3D/CSGCylinder3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0565071, 0)
+cast_shadow = 0
+operation = 2
+radius = 0.0488281
+height = 0.146751
+
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.18374, 0)
 light_energy = 0.4
@@ -360,6 +384,7 @@ mesh = SubResource("SphereMesh_g2els")
 [node name="e" type="MeshInstance3D" parent="eye"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0580758)
 material_override = SubResource("StandardMaterial3D_dqkch")
+cast_shadow = 0
 mesh = SubResource("SphereMesh_qlg0r")
 skeleton = NodePath("../..")
 
@@ -371,6 +396,7 @@ mesh = SubResource("SphereMesh_g2els")
 [node name="e" type="MeshInstance3D" parent="eye2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0580758)
 material_override = SubResource("StandardMaterial3D_dqkch")
+cast_shadow = 0
 mesh = SubResource("SphereMesh_qlg0r")
 skeleton = NodePath("../..")
 

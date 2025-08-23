@@ -28,8 +28,10 @@ func hit(damage: int):
 	if not is_multiplayer_authority(): return
 	health -= damage
 	if health <= 0:
-		queue_free()
-
+		dead.rpc()
+@rpc('any_peer')
+func dead():
+	queue_free()
 
 @rpc("any_peer")
 func set_pos(pos: Vector3):
@@ -191,4 +193,8 @@ func rotate_eyes_to(player:CharacterBody3D):
 		#
 		##player.transform.looking_at()
 		eye.look_at(Vector3(pos.x, pos.y + 1.477, pos.z))
-		eye_2.look_at(Vector3(pos.x, pos.y + 1.477, pos.z))
+		eye.rotation.x = clamp(eye.rotation.x, deg_to_rad(-90), deg_to_rad(90))
+		eye.rotation.y = clamp(eye.rotation.y, deg_to_rad(-90), deg_to_rad(90))
+		eye.rotation.z = clamp(eye.rotation.z, deg_to_rad(-90), deg_to_rad(90))
+		eye_2.global_rotation = eye.global_rotation
+		

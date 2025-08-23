@@ -73,5 +73,10 @@ horizontal_alignment = 1
 layout_mode = 2
 text = "запустить сервер кваса"
 
+[node name="settings" type="Button" parent="KvasPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "настройки"
+
 [connection signal="pressed" from="KvasPanel/MarginContainer/VBoxContainer/ConnectToKvas" to="." method="_on_connect_to_kvas_pressed"]
 [connection signal="pressed" from="KvasPanel/MarginContainer/VBoxContainer/KvasServer" to="." method="_on_kvas_server_pressed"]
+[connection signal="pressed" from="KvasPanel/MarginContainer/VBoxContainer/settings" to="." method="_on_settings_pressed"]

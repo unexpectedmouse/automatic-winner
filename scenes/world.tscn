@@ -1,22 +1,25 @@
-[gd_scene load_steps=9 format=3 uid="uid://ee3oeo2rgbtt"]
+[gd_scene load_steps=12 format=3 uid="uid://ee3oeo2rgbtt"]
 
 [ext_resource type="Script" uid="uid://dun6wdaffv7tw" path="res://scripts/world.gd" id="1_qfnet"]
+[ext_resource type="Script" uid="uid://cusrq0gx70jxc" path="res://scripts/world_environment.gd" id="2_71j4m"]
 [ext_resource type="PackedScene" uid="uid://iyvykwc3myjp" path="res://scenes/map.tscn" id="2_k0juu"]
 [ext_resource type="Script" uid="uid://dr17g88rn4t1t" path="res://scripts/charge_light.gd" id="5_71j4m"]
+[ext_resource type="Script" uid="uid://db12ko1jwcn41" path="res://scripts/charge_kvas.gd" id="5_qfnet"]
 
 [sub_resource type="Sky" id="Sky_71j4m"]
 
 [sub_resource type="Environment" id="Environment_qfnet"]
-background_mode = 2
+background_mode = 1
 sky = SubResource("Sky_71j4m")
 tonemap_mode = 2
+tonemap_white = 2.0
 glow_enabled = true
 glow_intensity = 0.35
 glow_strength = 1.19
-glow_bloom = 0.1
-glow_blend_mode = 0
+glow_bloom = 0.5
+fog_enabled = true
+fog_light_color = Color(0.0477043, 0.0576729, 0.0679132, 1)
 volumetric_fog_enabled = true
-volumetric_fog_density = 0.027
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_k0juu"]
 
@@ -29,15 +32,19 @@ emission = Color(0.956863, 0.956863, 0, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_i7141"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_71j4m"]
+transparency = 1
+blend_mode = 1
+albedo_color = Color(0.956863, 0.541176, 0, 0.368627)
+emission_enabled = true
+emission = Color(0.403628, 0.224105, 0, 1)
+
 [node name="World" type="Node3D"]
 script = ExtResource("1_qfnet")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_qfnet")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
-transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
-shadow_enabled = true
+script = ExtResource("2_71j4m")
 
 [node name="map" parent="." instance=ExtResource("2_k0juu")]
 
@@ -54,6 +61,21 @@ mesh = SubResource("BoxMesh_i7141")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="charge_light"]
 light_color = Color(0.956863, 0.956863, 0, 1)
+light_energy = 0.15
+
+[node name="charge_kvas" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.91721, 0.663315, -17.573)
+script = ExtResource("5_qfnet")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="charge_kvas"]
+shape = SubResource("BoxShape3D_k0juu")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="charge_kvas"]
+material_override = SubResource("StandardMaterial3D_71j4m")
+mesh = SubResource("BoxMesh_i7141")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="charge_kvas"]
+light_color = Color(0.758771, 0.478079, 1.92523e-07, 1)
 light_energy = 0.15
 
 [node name="players" type="Node3D" parent="."]
@@ -136,3 +158,4 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [connection signal="body_entered" from="charge_light" to="charge_light" method="_on_body_entered"]
+[connection signal="body_entered" from="charge_kvas" to="charge_kvas" method="_on_body_entered"]
