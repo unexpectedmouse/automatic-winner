@@ -3,14 +3,17 @@ class_name Player
 
 @onready var animator: AnimationPlayer = $AnimationPlayer
 @onready var kvas_pos: Marker3D = $KvasPos
-@onready var camera: Camera3D = $Camera3D
-@onready var kvas: Node3D = $Camera3D/Node3D/Kvas
-@onready var flashlight: SpotLight3D = $Camera3D/Flashlight
+@onready var camera: Camera3D = %Camera3D
+@onready var rotation_objects: Node3D = $kvasoman/rotation_objects
+@onready var kvas: Node3D = %Camera3D/Node3D/Kvas
+@onready var flashlight: SpotLight3D = %Camera3D/Flashlight
 @onready var omnilight: OmniLight3D = $OmniLight3D
 @onready var target: Node3D = get_tree().root.get_node("World")
 @onready var id_label: Label3D = $Label3D
-@onready var eye: MeshInstance3D = $eye
-@onready var eye_2: MeshInstance3D = $eye2
+@onready var eye: MeshInstance3D = $kvasoman/rotation_objects/eye
+@onready var eye_2: MeshInstance3D = $kvasoman/rotation_objects/eye2
+@onready var kvasoman: Node3D = %kvasoman
+@onready var moving_animatiion: AnimationPlayer = $moving_animatiion
 
 
 const weapon = preload("res://scenes/kvas.tscn")
@@ -29,6 +32,7 @@ func hit(damage: int):
 	health -= damage
 	if health <= 0:
 		dead.rpc()
+
 @rpc('any_peer')
 func dead():
 	queue_free()
@@ -56,6 +60,7 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	if not is_multiplayer_authority(): return
+	kvasoman.hide()
 	eye.hide()
 	eye_2.hide()
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -98,6 +103,7 @@ func _physics_process(delta: float) -> void:
 
 	var input := Input.get_vector("left", "right", "go", "back")
 	if input:
+		moving_animatiion.play('walk')
 		var move := (transform.basis * Vector3(input.x, 0, input.y)).normalized() * speed
 		if is_on_floor():
 			velocity.x = move.x
@@ -106,6 +112,7 @@ func _physics_process(delta: float) -> void:
 			velocity.x = move_toward(velocity.x, move.x, speed * 0.025)
 			velocity.z = move_toward(velocity.z, move.z, speed * 0.025)
 	else:
+		moving_animatiion.stop(true)
 		if is_on_floor():
 			velocity.x = move_toward(velocity.x, 0, speed)
 			velocity.z = move_toward(velocity.z, 0, speed)
@@ -120,6 +127,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		rotate_y(-event.relative.x * 0.005)
+		rotation_objects.rotate_x(-event.relative.y * 0.005)
 		camera.rotate_x(-event.relative.y * 0.005)
 	elif event is InputEventKey:
 		if event.is_action_pressed("ui_cancel"):
@@ -192,7 +200,7 @@ func rotate_eyes_to(player:CharacterBody3D):
 		##eye_2.transform = lerp(eye_2.transform, eye_2.transform.looking_at(Vector3(pos.x, pos.y + 1.477, pos.z)), 0.1)
 		#
 		##player.transform.looking_at()
-		eye.look_at(Vector3(pos.x, pos.y + 1.477, pos.z))
+		eye.look_at(Vector3(pos.x, pos.y + 1.918, pos.z))
 		eye.rotation.x = clamp(eye.rotation.x, deg_to_rad(-90), deg_to_rad(90))
 		eye.rotation.y = clamp(eye.rotation.y, deg_to_rad(-90), deg_to_rad(90))
 		eye.rotation.z = clamp(eye.rotation.z, deg_to_rad(-90), deg_to_rad(90))
