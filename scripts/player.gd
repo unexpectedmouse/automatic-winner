@@ -4,17 +4,18 @@ class_name Player
 @onready var animator: AnimationPlayer = $AnimationPlayer
 @onready var kvas_pos: Marker3D = $KvasPos
 @onready var camera: Camera3D = %Camera3D
-@onready var rotation_objects: Node3D = $kvasoman/rotation_objects
-@onready var kvas: Node3D = %Camera3D/Node3D/Kvas
-@onready var flashlight: SpotLight3D = %Camera3D/Flashlight
+@onready var rotation_objects: Node3D = %rotation_objects
+@onready var kvas: Node3D = %rotation_objects/Node3D/Kvas
+@onready var flashlight: SpotLight3D = %flashlight/Flashlight
 @onready var omnilight: OmniLight3D = $OmniLight3D
 @onready var target: Node3D = get_tree().root.get_node("World")
 @onready var id_label: Label3D = $Label3D
-@onready var eye: MeshInstance3D = $kvasoman/rotation_objects/eye
-@onready var eye_2: MeshInstance3D = $kvasoman/rotation_objects/eye2
+@onready var eye: MeshInstance3D = %eye
+@onready var eye_2: MeshInstance3D = %eye2
 @onready var kvasoman: Node3D = %kvasoman
 @onready var moving_animatiion: AnimationPlayer = $moving_animatiion
 
+@onready var spin_node:Node3D
 const weapon = preload("res://scenes/kvas.tscn")
 const speed = 4
 const jump_strength = 5.0
@@ -59,7 +60,11 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	if not is_multiplayer_authority(): return
+	spin_node = camera
 	kvasoman.hide()
+	$rotation_objects/body_head.hide()
+	$rotation_objects/left_hand.hide()
+	$rotation_objects/right_hand.hide()
 	eye.hide()
 	eye_2.hide()
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -88,12 +93,18 @@ func _physics_process(delta: float) -> void:
 	
 	rotate_eyes_to(get_nearest_player())
 	if not is_multiplayer_authority(): return
-	
+	$CollisionShape3D2.rotation_degrees = rotation_objects.rotation_degrees
 	if flashlight_charge > 0:
 		flashlight_charge = move_toward(flashlight_charge, 0, discharge_speed * delta)
 	else:
 		flashlight.light_energy = move_toward(flashlight.light_energy, 0, 0.05)
 	
+	#if Input.is_action_just_pressed('spin'):
+		#spin_node = rotation_objects
+	#elif Input.is_action_just_released('spin'):
+		#spin_node = camera
+		#rotation_objects.rotation_degrees.x = 0
+	#
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
@@ -127,7 +138,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		rotate_y(-event.relative.x * 0.005)
 		rotation_objects.rotate_x(-event.relative.y * 0.005)
-		camera.rotate_x(-event.relative.y * 0.005)
+		#camera.rotate_x(-event.relative.y * 0.005)
 	elif event is InputEventKey:
 		if event.is_action_pressed("ui_cancel"):
 			if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
