@@ -15,7 +15,6 @@ class_name Player
 @onready var kvasoman: Node3D = %kvasoman
 @onready var moving_animatiion: AnimationPlayer = $moving_animatiion
 
-
 const weapon = preload("res://scenes/kvas.tscn")
 const speed = 4
 const jump_strength = 5.0
@@ -33,7 +32,7 @@ func hit(damage: int):
 	if health <= 0:
 		dead.rpc()
 
-@rpc('any_peer')
+@rpc("any_peer")
 func dead():
 	queue_free()
 

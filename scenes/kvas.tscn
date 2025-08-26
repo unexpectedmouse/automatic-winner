@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://txko3n07btcf"]
+[gd_scene load_steps=19 format=3 uid="uid://txko3n07btcf"]
 
 [ext_resource type="Script" uid="uid://b6cstrbdvpmuj" path="res://scripts/kvas.gd" id="1_cs4s8"]
 [ext_resource type="PackedScene" uid="uid://cn3y3u227728c" path="res://scenes/kvas_scene.tscn" id="1_lp3y1"]
@@ -82,6 +82,57 @@ particles_anim_h_frames = 1
 particles_anim_v_frames = 1
 particles_anim_loop = false
 
+[sub_resource type="Animation" id="Animation_cs4s8"]
+resource_name = "boom"
+length = 2.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("gun:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.03333, 2.16667, 2.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0.189869, 0.189869, 0.189869), Vector3(0.23, 0.23, 0.23), Vector3(0.21, 0.21, 0.21), Vector3(0.25, 0.25, 0.25)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(2.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"boom"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_2ev1p"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("gun:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.189869, 0.189869, 0.189869)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_x6egi"]
+_data = {
+&"RESET": SubResource("Animation_2ev1p"),
+&"boom": SubResource("Animation_cs4s8")
+}
+
 [node name="kvas" type="RigidBody3D"]
 contact_monitor = true
 max_contacts_reported = 1
@@ -111,4 +162,15 @@ explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_lp3y1")
 draw_pass_1 = SubResource("QuadMesh_cs4s8")
 
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.5
+one_shot = true
+autostart = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_x6egi")
+}
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
