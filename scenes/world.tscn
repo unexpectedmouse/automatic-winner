@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dun6wdaffv7tw" path="res://scripts/world.gd" id="1_qfnet"]
 [ext_resource type="Script" uid="uid://cusrq0gx70jxc" path="res://scripts/world_environment.gd" id="2_71j4m"]
 [ext_resource type="PackedScene" uid="uid://iyvykwc3myjp" path="res://scenes/map.tscn" id="2_k0juu"]
-[ext_resource type="PackedScene" uid="uid://oafn2ku32rqj" path="res://scenes/tasks/light_task.tscn" id="3_i7141"]
+[ext_resource type="PackedScene" uid="uid://ouafcdtt3cjh" path="res://scenes/tasks/cleaning_task.tscn" id="3_4mrxx"]
 [ext_resource type="Script" uid="uid://dr17g88rn4t1t" path="res://scripts/charge_light.gd" id="5_71j4m"]
 [ext_resource type="Script" uid="uid://db12ko1jwcn41" path="res://scripts/charge_kvas.gd" id="5_qfnet"]
 
@@ -42,7 +42,7 @@ emission = Color(0.403628, 0.224105, 0, 1)
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_qfnet")
-tasks_scenes = Array[PackedScene]([ExtResource("3_i7141")])
+tasks_scenes = Array[PackedScene]([ExtResource("3_4mrxx")])
 random_positions = Array[Vector3]([Vector3(-7.35479, 9.13918, -0.105036), Vector3(7.35479, 9.13918, -0.105036)])
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -51,31 +51,20 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -1.0
-offset_top = -31.0
-offset_right = 1.0
-offset_bottom = 31.0
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="ColorRect2" type="ColorRect" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -31.0
-offset_top = -1.0
-offset_right = 31.0
-offset_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+color = Color(1, 1, 1, 0.466667)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_qfnet")
 script = ExtResource("2_71j4m")
 
 [node name="map" parent="." instance=ExtResource("2_k0juu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="charge_light" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.50122, 0.663315, 10.6599)
@@ -111,6 +100,7 @@ light_energy = 0.15
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.27649, -4.39052)
 
 [node name="positions" type="Node3D" parent="."]
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0)
 
 [node name="Marker3D" type="Marker3D" parent="positions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.73826, 6.233, -0.505976)

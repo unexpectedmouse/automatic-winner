@@ -70,10 +70,14 @@ func randomize_ids():
 	var id = randi_range(0,positions.get_child_count()-1)
 	return id
 
-
+var deleted = false
 @rpc("any_peer", "call_local")
-func task_completed(task: int):
-	print("completed ", tasks[task].name)
+func task_completed(task: int, delete: bool):
+	if not deleted:
+		print("completed ", tasks[task].name)
+		if delete:
+			tasks[task].queue_free()
+		deleted = true
 
 
 func select_task():
@@ -81,10 +85,10 @@ func select_task():
 
 
 @rpc("any_peer", "call_local")
-func place_task(index: int, position: Vector3):
+func place_task(index: int, _position: Vector3):
 	var task: Node3D = tasks_scenes[index].instantiate()
 	add_child(task)
 	tasks.append(task)
-	task.completed.connect(func():
-		task_completed.rpc(tasks.size() - 1))
-	task.global_position = position
+	task.completed.connect(func(delete):
+		task_completed.rpc(tasks.size() - 1, delete))
+	task.global_position = _position

@@ -20,7 +20,7 @@ func pick_card():
 @rpc("any_peer", "call_local")
 func put_card():
 	switch_card.show()
-	completed.emit()
+	completed.emit(true)
 
 
 func handle_click(object: Node3D):
