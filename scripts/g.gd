@@ -1,16 +1,11 @@
 extends Node
+signal clicked(object: Node3D)
 
 var menu: Control
 var world_scene := preload("res://scenes/world.tscn")
 var player_scene := preload("res://scenes/player.tscn")
 var peer := ENetMultiplayerPeer.new()
 var world: Node3D
-
-var players_position = {
-	
-}
-
-
 
 
 func create_kvas_server():
@@ -27,6 +22,7 @@ func connect_to_kvas(kvas_address: String):
 	multiplayer.multiplayer_peer = peer
 	start_game()
 
+
 func start_game():
 	menu.queue_free()
 	world = world_scene.instantiate()
@@ -37,3 +33,7 @@ func new_kvas_player(id: int):
 	var player: Player = player_scene.instantiate()
 	player.name = str(id)
 	world.get_node("players").add_child(player)
+
+
+func click(obj: Node3D):
+	clicked.emit(obj)

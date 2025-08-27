@@ -5,7 +5,7 @@ class_name Player
 @onready var kvas_pos: Marker3D = $KvasPos
 @onready var camera: Camera3D = %Camera3D
 @onready var rotation_objects: Node3D = %rotation_objects
-@onready var kvas: Node3D = %rotation_objects/Node3D/Kvas
+@onready var kvas: Node3D = %rotation_objects/Kvas
 @onready var flashlight: SpotLight3D = %flashlight/Flashlight
 @onready var omnilight: OmniLight3D = $OmniLight3D
 @onready var target: Node3D = get_tree().root.get_node("World")
@@ -15,7 +15,6 @@ class_name Player
 @onready var kvasoman: Node3D = %kvasoman
 @onready var moving_animatiion: AnimationPlayer = $moving_animatiion
 
-@onready var spin_node:Node3D
 const weapon = preload("res://scenes/kvas.tscn")
 const speed = 4
 const jump_strength = 5.0
@@ -24,7 +23,23 @@ const discharge_speed = 1
 
 var got_kvas := false
 var flashlight_charge := 100.0
-@export var health := 100
+var health := 100
+
+
+func _enter_tree() -> void:
+	set_multiplayer_authority(int(name))
+
+
+func _ready() -> void:
+	if not is_multiplayer_authority(): return
+	kvasoman.hide()
+	$rotation_objects/body_head.hide()
+	$rotation_objects/left_hand.hide()
+	$rotation_objects/right_hand.hide()
+	eye.hide()
+	eye_2.hide()
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	camera.current = true
 
 
 func hit(damage: int):
@@ -36,6 +51,7 @@ func hit(damage: int):
 @rpc("any_peer")
 func dead():
 	queue_free()
+
 
 @rpc("any_peer")
 func set_pos(pos: Vector3):
@@ -50,36 +66,14 @@ func set_group(group: String):
 		get_kvas()
 	else:
 		kvas.queue_free()
-		animator.queue_free()
 		got_kvas = false
 
-
-func _enter_tree() -> void:
-	set_multiplayer_authority(int(name))
-
-
-func _ready() -> void:
-	if not is_multiplayer_authority(): return
-	spin_node = camera
-	kvasoman.hide()
-	$rotation_objects/body_head.hide()
-	$rotation_objects/left_hand.hide()
-	$rotation_objects/right_hand.hide()
-	eye.hide()
-	eye_2.hide()
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	camera.current = true
-	
-	#min_dist = G.players_position[name]
-
-var poses = []
-var min_dist = null
 
 func get_nearest_player():
 	var nearest:CharacterBody3D = null
 	var min_dist = null
 	
-	for player:CharacterBody3D in get_tree().get_nodes_in_group('kvasoman'):
+	for player: CharacterBody3D in get_tree().get_nodes_in_group('kvasoman'):
 		if player != self:
 			var dist_to_player = global_position.distance_to(player.global_position)
 			if min_dist == null or dist_to_player<min_dist:
@@ -87,24 +81,59 @@ func get_nearest_player():
 				nearest = player
 	return nearest
 
+
+func rotate_eyes_to(player:CharacterBody3D):
+	if player != null:
+		var pos = player.global_position
+
+		eye.look_at(Vector3(pos.x, pos.y + 1.918, pos.z))
+		eye.rotation.x = clamp(eye.rotation.x, deg_to_rad(-90), deg_to_rad(90))
+		eye.rotation.y = clamp(eye.rotation.y, deg_to_rad(-90), deg_to_rad(90))
+		eye.rotation.z = clamp(eye.rotation.z, deg_to_rad(-90), deg_to_rad(90))
+		eye_2.global_rotation = eye.global_rotation
+
+
+@onready var space = get_world_3d().direct_space_state
+var ray_length = 100
+var ray_query = PhysicsRayQueryParameters3D.new() # create this once and reuse it
+func shoot_ray() -> Node3D:
+	var mouse_position = get_viewport().get_mouse_position()
+	var from = camera.project_ray_origin(mouse_position)
+	var to = from + camera.project_ray_normal(mouse_position) * ray_length
+	print(from)
+	ray_query.from = from
+	ray_query.to = to
+	ray_query.collide_with_areas = true
+
+	var result = space.intersect_ray(ray_query)
+	if result != {}:
+		return result['collider'].get_parent()
+	else:
+		return null
+
+
+func process_clicks():
+	if Input.is_action_just_pressed("click"):
+		var collider = shoot_ray()
+		if collider:
+			print(collider.name)
+			G.click(collider)
+
+
 func _physics_process(delta: float) -> void:
 	id_label.text = str(health)
 	omnilight.light_energy = 1 - flashlight.light_energy
-	
 	rotate_eyes_to(get_nearest_player())
-	if not is_multiplayer_authority(): return
 	$CollisionShape3D2.rotation_degrees = rotation_objects.rotation_degrees
+
+	if not is_multiplayer_authority(): return
+	process_clicks()
+	
 	if flashlight_charge > 0:
 		flashlight_charge = move_toward(flashlight_charge, 0, discharge_speed * delta)
 	else:
-		flashlight.light_energy = move_toward(flashlight.light_energy, 0, 0.05)
-	
-	#if Input.is_action_just_pressed('spin'):
-		#spin_node = rotation_objects
-	#elif Input.is_action_just_released('spin'):
-		#spin_node = camera
-		#rotation_objects.rotation_degrees.x = 0
-	#
+		flashlight.light_energy = move_toward(flashlight.light_energy, 0, 0.005)
+
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
@@ -138,7 +167,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		rotate_y(-event.relative.x * 0.005)
 		rotation_objects.rotate_x(-event.relative.y * 0.005)
-		#camera.rotate_x(-event.relative.y * 0.005)
 	elif event is InputEventKey:
 		if event.is_action_pressed("ui_cancel"):
 			if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -146,14 +174,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			else:
 				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	elif event is InputEventMouseButton:
+		if not got_kvas: return
 		if event.is_action_pressed("throw"):
-			if not got_kvas: return
 			animator.play("shake")
-			shake_kvas_anim.rpc()
 		elif event.is_action_released("throw"):
-			if not got_kvas: return
 			animator.play("throw")
-			throw_kvas_rpc.rpc()
 
 
 func get_kvas():
@@ -161,23 +186,6 @@ func get_kvas():
 	got_kvas = true
 	animator.play("take")
 	kvas.show()
-	get_kvas_anim.rpc()
-
-
-@rpc
-func get_kvas_anim():
-	animator.play("take")
-	kvas.show()
-
-
-@rpc
-func shake_kvas_anim():
-	animator.play("shake")
-
-
-@rpc
-func throw_kvas_rpc():
-	animator.play("throw")
 
 
 func throw_kvas():
@@ -194,25 +202,5 @@ func throw_kvas():
 
 func recharge_flashlight():
 	if not is_multiplayer_authority(): return
-	
 	flashlight_charge = 100
 	flashlight.light_energy = 1
-
-
-func rotate_eyes_to(player:CharacterBody3D):
-	#if not is_multiplayer_authority(): return
-	if player != null:
-		var pos = player.global_position
-		
-		#eye.global_rotation.abs()
-		#eye.transform = lerp(eye.transform, eye.transform.looking_at(Vector3(pos.x, pos.y + 1.477, pos.z),Vector3.UP, true), 0.1)
-		#eye_2.transform = eye.transform
-		##eye_2.transform = lerp(eye_2.transform, eye_2.transform.looking_at(Vector3(pos.x, pos.y + 1.477, pos.z)), 0.1)
-		#
-		##player.transform.looking_at()
-		eye.look_at(Vector3(pos.x, pos.y + 1.918, pos.z))
-		eye.rotation.x = clamp(eye.rotation.x, deg_to_rad(-90), deg_to_rad(90))
-		eye.rotation.y = clamp(eye.rotation.y, deg_to_rad(-90), deg_to_rad(90))
-		eye.rotation.z = clamp(eye.rotation.z, deg_to_rad(-90), deg_to_rad(90))
-		eye_2.global_rotation = eye.global_rotation
-		

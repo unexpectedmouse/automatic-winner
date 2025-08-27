@@ -2,7 +2,7 @@ extends RigidBody3D
 @onready var liquid: GPUParticles3D = $liquid
 
 const max_damage = 50
-const explosion_radius = 3
+const explosion_radius = 3.0
 
 @onready var space = get_world_3d().direct_space_state
 var ray_query = PhysicsRayQueryParameters3D.new()

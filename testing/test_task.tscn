@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://b731eslxc5pvl"]
+
+[ext_resource type="Script" uid="uid://c4vktk64iuum4" path="res://testing/test_task.gd" id="1_2ynjt"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5yp4u"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_g5iq1"]
+
+[node name="TestTask" type="Node3D" groups=["taskbox"]]
+script = ExtResource("1_2ynjt")
+
+[node name="TaskBox" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TaskBox"]
+shape = SubResource("BoxShape3D_5yp4u")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_g5iq1")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(0.862398, 0.172888, 0, 1)

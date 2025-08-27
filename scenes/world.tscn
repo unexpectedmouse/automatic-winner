@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://ee3oeo2rgbtt"]
+[gd_scene load_steps=13 format=3 uid="uid://ee3oeo2rgbtt"]
 
 [ext_resource type="Script" uid="uid://dun6wdaffv7tw" path="res://scripts/world.gd" id="1_qfnet"]
 [ext_resource type="Script" uid="uid://cusrq0gx70jxc" path="res://scripts/world_environment.gd" id="2_71j4m"]
 [ext_resource type="PackedScene" uid="uid://iyvykwc3myjp" path="res://scenes/map.tscn" id="2_k0juu"]
+[ext_resource type="PackedScene" uid="uid://b731eslxc5pvl" path="res://testing/test_task.tscn" id="2_qfnet"]
 [ext_resource type="Script" uid="uid://dr17g88rn4t1t" path="res://scripts/charge_light.gd" id="5_71j4m"]
 [ext_resource type="Script" uid="uid://db12ko1jwcn41" path="res://scripts/charge_kvas.gd" id="5_qfnet"]
 
@@ -41,6 +42,8 @@ emission = Color(0.403628, 0.224105, 0, 1)
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_qfnet")
+tasks_scenes = Array[PackedScene]([ExtResource("2_qfnet")])
+random_positions = Array[Vector3]([Vector3(0, 0, -1), Vector3(0, 0, -2), Vector3(0, 0, -3)])
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_qfnet")

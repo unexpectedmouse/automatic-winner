@@ -1,7 +1,9 @@
 extends Node3D
 
 
-var player = preload("res://scenes/player.tscn")
+@export_category("Tasks")
+@export var tasks_scenes: Array[PackedScene] = []
+@export var random_positions: Array[Vector3] = []
 
 @onready var players_node: Node3D = $players
 @onready var positions: Node3D = $positions
@@ -9,16 +11,17 @@ var player = preload("res://scenes/player.tscn")
 
 var players_ready := 0
 var is_ready := false
+var tasks: Array[Node3D] = []
 
 
 func update_ready() -> void:
 	ready_label.text = 'нажмите ENTER, чтобы расквасится ' + str(players_ready) + "/" + str(players_node.get_child_count())
 	if players_ready == players_node.get_child_count():
 		ready_label.hide()
-	if multiplayer.get_unique_id() == 1 and players_ready == players_node.get_child_count():
+	if multiplayer.is_server() and players_ready == players_node.get_child_count():
 		set_player_role()
 		set_player_to_pos()
-		
+		select_task()
 
 
 @rpc("any_peer")
@@ -40,14 +43,13 @@ func _ready() -> void:
 
 func set_player_role():
 	var hunter_id = randi_range(0, players_ready-1)
-	for player:CharacterBody3D in players_node.get_children():
+	for player: CharacterBody3D in players_node.get_children():
 		if players_node.get_child(hunter_id) == player:
 			player.set_group.rpc("hunter")
 			player.set_group('hunter')
 		else:
 			player.set_group.rpc("player")
 			player.set_group('player')
-
 
 
 func set_player_to_pos():
@@ -67,3 +69,22 @@ func set_player_to_pos():
 func randomize_ids():
 	var id = randi_range(0,positions.get_child_count())
 	return id
+
+
+@rpc("any_peer", "call_local")
+func task_completed(task: int):
+	tasks[task].queue_free()
+
+
+func select_task():
+	place_task.rpc(randi_range(0, tasks_scenes.size()) - 1, random_positions.pick_random())
+
+
+@rpc("any_peer", "call_local")
+func place_task(index: int, position: Vector3):
+	var task: Node3D = tasks_scenes[index].instantiate()
+	add_child(task)
+	tasks.append(task)
+	task.completed.connect(func():
+		task_completed.rpc(tasks.size() - 1))
+	task.global_position = position
