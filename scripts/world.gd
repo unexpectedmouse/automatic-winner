@@ -67,7 +67,7 @@ func set_player_to_pos():
 
 
 func randomize_ids():
-	var id = randi_range(0,positions.get_child_count())
+	var id = randi_range(0,positions.get_child_count()-1)
 	return id
 
 
