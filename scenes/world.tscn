@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dun6wdaffv7tw" path="res://scripts/world.gd" id="1_qfnet"]
 [ext_resource type="Script" uid="uid://cusrq0gx70jxc" path="res://scripts/world_environment.gd" id="2_71j4m"]
 [ext_resource type="PackedScene" uid="uid://iyvykwc3myjp" path="res://scenes/map.tscn" id="2_k0juu"]
-[ext_resource type="PackedScene" uid="uid://b731eslxc5pvl" path="res://testing/test_task.tscn" id="2_qfnet"]
+[ext_resource type="PackedScene" uid="uid://oafn2ku32rqj" path="res://scenes/tasks/light_task.tscn" id="3_i7141"]
 [ext_resource type="Script" uid="uid://dr17g88rn4t1t" path="res://scripts/charge_light.gd" id="5_71j4m"]
 [ext_resource type="Script" uid="uid://db12ko1jwcn41" path="res://scripts/charge_kvas.gd" id="5_qfnet"]
 
@@ -42,8 +42,34 @@ emission = Color(0.403628, 0.224105, 0, 1)
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_qfnet")
-tasks_scenes = Array[PackedScene]([ExtResource("2_qfnet")])
-random_positions = Array[Vector3]([Vector3(0, 0, -1), Vector3(0, 0, -2), Vector3(0, 0, -3)])
+tasks_scenes = Array[PackedScene]([ExtResource("3_i7141")])
+random_positions = Array[Vector3]([Vector3(-7.35479, 9.13918, -0.105036), Vector3(7.35479, 9.13918, -0.105036)])
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1.0
+offset_top = -31.0
+offset_right = 1.0
+offset_bottom = 31.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -31.0
+offset_top = -1.0
+offset_right = 31.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_qfnet")

@@ -73,7 +73,7 @@ func randomize_ids():
 
 @rpc("any_peer", "call_local")
 func task_completed(task: int):
-	tasks[task].queue_free()
+	print("completed ", tasks[task].name)
 
 
 func select_task():

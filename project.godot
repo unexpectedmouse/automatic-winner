@@ -40,6 +40,8 @@ folder_colors={
 
 player=""
 taskbox=""
+lightcard=""
+lightcardswitch=""
 
 [input]
 

@@ -8,5 +8,5 @@ func _ready() -> void:
 
 func process_click(object: Node3D):
 	if object.is_in_group("taskbox"):
-		print("object = area")
 		completed.emit()
+		queue_free()
