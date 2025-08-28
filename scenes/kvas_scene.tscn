@@ -4,14 +4,10 @@
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ntwm"]
 transparency = 4
+shading_mode = 0
 diffuse_mode = 3
 specular_mode = 1
 albedo_color = Color(0.29444, 0.187186, 0.0315224, 0.623529)
-metallic = 0.6
-metallic_specular = 0.0
-roughness = 0.23
-rim_enabled = true
-rim_tint = 0.23
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u7elq"]
 resource_name = "bottle"

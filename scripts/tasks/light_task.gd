@@ -1,5 +1,5 @@
 extends Node3D
-signal completed
+signal completed(destroy:bool)
 
 @onready var card: Node3D = $light_card
 @onready var switch: Node3D = $switch_for_lightning_card
@@ -21,6 +21,8 @@ func pick_card():
 func put_card():
 	switch_card.show()
 	completed.emit(true)
+	queue_free()
+
 
 
 func handle_click(object: Node3D):

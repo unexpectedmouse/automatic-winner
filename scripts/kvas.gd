@@ -29,3 +29,7 @@ func boom() -> void:
 
 func calculate_damage(target: CharacterBody3D) -> int:
 	return max_damage * (global_position.distance_to(target.global_position) / explosion_radius)
+
+
+func _on_foam_finished() -> void:
+	queue_free()

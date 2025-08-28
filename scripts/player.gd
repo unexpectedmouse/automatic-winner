@@ -48,8 +48,9 @@ func hit(damage: int):
 	if health <= 0:
 		dead.rpc()
 
-@rpc("any_peer")
+@rpc("any_peer", 'call_local')
 func dead():
+	G.world.update_players_alive()
 	queue_free()
 
 
@@ -115,7 +116,7 @@ func shoot_ray() -> Node3D:
 func process_clicks():
 	if Input.is_action_just_pressed("click"):
 		var collider = shoot_ray()
-		if collider:
+		if collider and is_in_group('player'):
 			print(collider.name)
 			G.click(collider)
 

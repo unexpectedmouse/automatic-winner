@@ -1,5 +1,5 @@
 extends Node3D
-signal completed(delete:bool)
+signal completed(destroy:bool)
 
 var cleaned = 0
 var max_cleaned = null
@@ -21,7 +21,10 @@ func hide_obj(_name:String):
 @rpc("any_peer", "call_local")
 func task_completed():
 	completed.emit(true)
-	
+	queue_free()
+
+
+
 func handle_click(object:Node3D):
 	if object.is_in_group("mug"):
 		#var i = obj
