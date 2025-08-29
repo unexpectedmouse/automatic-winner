@@ -66,7 +66,7 @@ func set_group(group: String):
 	if group == 'hunter':
 		get_kvas()
 	else:
-		kvas.queue_free()
+		kvas.hide()
 		got_kvas = false
 
 

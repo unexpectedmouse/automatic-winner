@@ -38,12 +38,30 @@ func update_ready() -> void:
 	if players_ready == players_node.get_child_count():
 		change_loop()
 
-func update_players_alive() -> void:
-	if multiplayer.is_server():
+var checked = false
+func update_players_alive():
+	if not checked:
 		for player:CharacterBody3D in players_node.get_children():
 			if player.is_in_group('player'):
-				G.players_alive += 1
-	$Label.text = str(G.players_alive)
+				plus_alive_player.rpc()
+		$Label.text = str(G.players_alive)
+		set_label_players_alive.rpc(G.players_alive)
+	else:
+		if G.players_alive == 0:
+			won.rpc(false)
+
+
+@rpc("any_peer")
+func plus_alive_player():
+	G.players_alive += 1
+	set_label_players_alive(G.players_alive)
+	checked = true
+
+
+@rpc('any_peer')
+func set_label_players_alive(players:int):
+	$Label.text = str(players)
+	
 
 @rpc("any_peer")
 func player_ready():
@@ -55,7 +73,6 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.is_action_pressed("ui_accept") and not is_ready:
 		is_ready = true
 		players_ready += 1
-
 		update_ready()
 		player_ready.rpc()
 
@@ -63,6 +80,7 @@ func _input(event: InputEvent) -> void:
 func change_loop():
 	update_players_alive()
 	if loop == (loop_max):
+		won.rpc(true)
 		print('players won')
 	else:
 		loop += 1
@@ -72,7 +90,7 @@ func change_loop():
 			select_task()
 	print('loop: ', loop, '\n', 'current_task: ', current_task)
 
-
+@rpc('any_peer')
 func won(players:bool):
 	var won_table = preload("res://scenes/win_table.tscn")
 	var won_table_inst = won_table.instantiate()
@@ -97,7 +115,7 @@ func set_player_role():
 func set_player_to_pos():
 	var id_was = []
 	for player: CharacterBody3D in players_node.get_children():
-		if player.is_in_group('player'):
+		if player.is_in_group('kvasoman'):
 			var id = randomize_ids()
 			if !id_was.has(id):
 				if player.get_multiplayer_authority() == 1:
