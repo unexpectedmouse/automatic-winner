@@ -44,7 +44,7 @@ emission = Color(0.403628, 0.224105, 0, 1)
 [node name="World" type="Node3D" node_paths=PackedStringArray("random_positions")]
 script = ExtResource("1_qfnet")
 tasks_scenes = Array[PackedScene]([ExtResource("3_4mrxx"), ExtResource("3_i7141")])
-random_positions = [NodePath("map/MAP/rooms/room")]
+random_positions = [NodePath("map/MAP/rooms/room"), NodePath("map/MAP/rooms/room2"), NodePath("map/MAP/rooms/room3"), NodePath("map/MAP/rooms/room4"), NodePath("map/MAP/rooms/room5")]
 
 [node name="ColorRect" type="ColorRect" parent="."]
 anchors_preset = 8
@@ -98,6 +98,8 @@ light_energy = 0.15
 
 [node name="players" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.27649, -4.39052)
+
+[node name="tasks" type="Node3D" parent="."]
 
 [node name="positions" type="Node3D" parent="."]
 transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0)
@@ -203,7 +205,7 @@ offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="."]
+[node name="players_alive_label" type="Label" parent="."]
 offset_right = 40.0
 offset_bottom = 23.0
 

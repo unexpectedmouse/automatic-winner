@@ -8,6 +8,8 @@ extends Node3D
 @onready var players_node: Node3D = $players
 @onready var positions: Node3D = $positions
 @onready var ready_label: Label = $ReadyPlayers
+@onready var tasks_node: Node3D = $tasks
+
 
 var players_ready := 0
 var is_ready := false
@@ -37,30 +39,8 @@ func update_ready() -> void:
 		set_player_to_pos()
 	if players_ready == players_node.get_child_count():
 		change_loop()
+		G.update_players_alive()
 
-var checked = false
-func update_players_alive():
-	if not checked:
-		for player:CharacterBody3D in players_node.get_children():
-			if player.is_in_group('player'):
-				plus_alive_player.rpc()
-		$Label.text = str(G.players_alive)
-		set_label_players_alive.rpc(G.players_alive)
-	else:
-		if G.players_alive == 0:
-			won.rpc(false)
-
-
-@rpc("any_peer")
-func plus_alive_player():
-	G.players_alive += 1
-	set_label_players_alive(G.players_alive)
-	checked = true
-
-
-@rpc('any_peer')
-func set_label_players_alive(players:int):
-	$Label.text = str(players)
 	
 
 @rpc("any_peer")
@@ -76,12 +56,16 @@ func _input(event: InputEvent) -> void:
 		update_ready()
 		player_ready.rpc()
 
-
-func change_loop():
-	update_players_alive()
+@rpc('any_peer','call_local')
+func check_loop():
 	if loop == (loop_max):
 		won.rpc(true)
 		print('players won')
+
+
+func change_loop():
+	check_loop.rpc()
+	if loop == (loop_max):pass
 	else:
 		loop += 1
 		current_task += 1
@@ -90,7 +74,7 @@ func change_loop():
 			select_task()
 	print('loop: ', loop, '\n', 'current_task: ', current_task)
 
-@rpc('any_peer')
+@rpc('any_peer', 'call_local')
 func won(players:bool):
 	var won_table = preload("res://scenes/win_table.tscn")
 	var won_table_inst = won_table.instantiate()
@@ -134,6 +118,7 @@ func randomize_ids():
 var completed = false
 @rpc("any_peer")
 func task_completed(task_name:String, destroy:bool):
+	completed = false
 	if not completed:
 		tasks_checking[current_task] = true
 		var t_c = preload("res://scenes/task_completed.tscn")

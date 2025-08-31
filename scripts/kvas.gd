@@ -1,7 +1,7 @@
 extends RigidBody3D
 @onready var liquid: GPUParticles3D = $liquid
 
-const max_damage = 50
+const max_damage = 5000
 const explosion_radius = 3.0
 
 @onready var space = get_world_3d().direct_space_state
@@ -14,6 +14,8 @@ func _ready() -> void:
 
 func boom() -> void:
 	$gun.hide()
+	$CollisionShape3D.disabled = true
+	
 	liquid.emitting = true
 	
 	for player: CharacterBody3D in get_tree().get_nodes_in_group("player"):
@@ -33,3 +35,7 @@ func calculate_damage(target: CharacterBody3D) -> int:
 
 func _on_foam_finished() -> void:
 	queue_free()
+
+
+func _on_timer_timeout() -> void:
+	G.update_players_alive()

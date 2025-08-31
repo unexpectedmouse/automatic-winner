@@ -7,5 +7,7 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
+
+#@rpc("any_peer", 'call_local')
 func delete_scene():
 	queue_free()

@@ -10,5 +10,7 @@ func win(players:bool) -> void:
 	else:
 		$Label.text = 'ПОБЕДИЛ ОХОТНИК'
 		$Label.add_theme_color_override("font_color", Color.DARK_RED)
-		
-		
+#
+#@rpc("any_peer", 'call_local')
+func delete_scene():
+	queue_free()

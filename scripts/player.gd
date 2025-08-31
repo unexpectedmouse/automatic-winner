@@ -48,9 +48,12 @@ func hit(damage: int):
 	if health <= 0:
 		dead.rpc()
 
-@rpc("any_peer", 'call_local')
+@rpc("any_peer")
 func dead():
-	G.world.update_players_alive()
+	G.players_alive_minus_one()
+	if int(name) == multiplayer.get_unique_id():
+		$MultiplayerSynchronizer.public_visibility = false
+	if !multiplayer.is_server():return
 	queue_free()
 
 

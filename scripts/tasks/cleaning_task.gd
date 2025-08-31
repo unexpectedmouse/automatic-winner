@@ -27,7 +27,6 @@ func task_completed():
 
 func handle_click(object:Node3D):
 	if object.is_in_group("mug"):
-		#var i = obj
 		hide_obj.rpc(object.name)
 		cleaned += 1
 		if cleaned == max_cleaned:
