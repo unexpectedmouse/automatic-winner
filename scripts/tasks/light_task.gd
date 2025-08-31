@@ -8,6 +8,7 @@ signal completed(destroy:bool)
 var card_picked := false
 
 func _ready() -> void:
+	name = 'LightTask'
 	G.clicked.connect(handle_click)
 	switch_card.hide()
 
@@ -20,8 +21,8 @@ func pick_card():
 @rpc("any_peer", "call_local")
 func put_card():
 	switch_card.show()
-	completed.emit(true)
 	queue_free()
+	completed.emit(true)
 
 
 

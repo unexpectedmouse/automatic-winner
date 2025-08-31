@@ -10,6 +10,7 @@ var objects = []
 
 
 func _ready() -> void:
+	name = 'cleaning_task'
 	objects = get_children()
 	max_cleaned = get_child_count()
 	G.clicked.connect(handle_click)
@@ -20,8 +21,8 @@ func hide_obj(_name:String):
 
 @rpc("any_peer", "call_local")
 func task_completed():
-	completed.emit(true)
 	queue_free()
+	completed.emit(true)
 
 
 
