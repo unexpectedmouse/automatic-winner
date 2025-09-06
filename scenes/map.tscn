@@ -3,14 +3,16 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u0rmt"]
 resource_name = "floor"
 cull_mode = 2
+diffuse_mode = 3
+specular_mode = 1
 albedo_color = Color(0.601266, 0.221739, 0.126562, 1)
-roughness = 0.5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0cv36"]
 resource_name = "ceil"
 cull_mode = 2
+diffuse_mode = 3
+specular_mode = 1
 albedo_color = Color(0.727835, 0.727835, 0.727835, 1)
-roughness = 0.5
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_6asig"]
 _surfaces = [{
@@ -72,8 +74,9 @@ data = PackedVector3Array(-11.3199, -0.2, 12.0042, -11.3199, 0, -36.9048, -11.31
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lvyjg"]
 resource_name = "Material.001"
 cull_mode = 2
+diffuse_mode = 3
+specular_mode = 1
 albedo_color = Color(0.443029, 0.272668, 0.224023, 1)
-roughness = 0.5
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_ue6le"]
 _surfaces = [{
@@ -113,20 +116,21 @@ data = PackedVector3Array(0, -1.4125, 1.4847, 1.5, -1.1646, 1.4847, 1.5, -1.4125
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rgqsa"]
 resource_name = "porog"
 cull_mode = 2
+diffuse_mode = 3
+specular_mode = 1
 albedo_color = Color(0.431184, 0.425674, 0.436702, 1)
-roughness = 0.5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_byl7s"]
 resource_name = "wood"
 cull_mode = 2
+diffuse_mode = 3
+specular_mode = 1
 albedo_color = Color(0.78469, 0.630316, 0.457363, 1)
-roughness = 0.5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w8uyy"]
 resource_name = "wallpapers"
 cull_mode = 2
 albedo_color = Color(0.906343, 0.90527, 0.839452, 1)
-roughness = 0.5
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_ak58s"]
 _surfaces = [{

@@ -48,7 +48,7 @@ func hit(damage: int):
 	if health <= 0:
 		dead.rpc()
 
-@rpc("any_peer")
+@rpc("any_peer", 'call_local')
 func dead():
 	G.players_alive_minus_one()
 	if int(name) == multiplayer.get_unique_id():

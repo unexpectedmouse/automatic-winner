@@ -656,26 +656,22 @@ unique_name_in_owner = true
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.707651, 0)
 
 [node name="body_head" type="MeshInstance3D" parent="rotation_objects"]
-cast_shadow = 0
 mesh = SubResource("ArrayMesh_qhqgy")
 skeleton = NodePath("")
 
 [node name="left_hand" type="MeshInstance3D" parent="rotation_objects"]
 transform = Transform3D(0.772741, -0.207055, 0, 0.207055, 0.772741, 0, 0, 0, 0.8, -0.5, 1.45, 0)
-cast_shadow = 0
 mesh = SubResource("ArrayMesh_qlg0r")
 skeleton = NodePath("")
 
 [node name="right_hand" type="MeshInstance3D" parent="rotation_objects"]
 transform = Transform3D(0.821037, 0.219996, 0, -0.219996, 0.821037, 0, 0, 0, 0.85, 0.5, 1.45, 0)
-cast_shadow = 0
 mesh = SubResource("ArrayMesh_rs6qk")
 skeleton = NodePath("")
 
 [node name="eye" type="MeshInstance3D" parent="rotation_objects"]
 unique_name_in_owner = true
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.2, 2.236, -0.527246)
-cast_shadow = 0
 mesh = SubResource("SphereMesh_g2els")
 skeleton = NodePath("../..")
 
@@ -689,7 +685,6 @@ skeleton = NodePath("../../..")
 [node name="eye2" type="MeshInstance3D" parent="rotation_objects"]
 unique_name_in_owner = true
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0.2, 2.238, -0.529246)
-cast_shadow = 0
 mesh = SubResource("SphereMesh_g2els")
 skeleton = NodePath("../..")
 
@@ -748,7 +743,6 @@ height = 0.146751
 
 [node name="Flashlight" type="SpotLight3D" parent="rotation_objects/flashlight"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.0166364, 0.189588, 0.00212991)
-light_volumetric_fog_energy = 5.0
 shadow_enabled = true
 spot_range = 21.8046
 spot_angle = 32.7895
@@ -768,19 +762,18 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 
 [node name="right_leg" type="MeshInstance3D" parent="kvasoman"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 1.6, 0)
-cast_shadow = 0
 mesh = SubResource("ArrayMesh_5i4xw")
 skeleton = NodePath("")
 
 [node name="left_leg" type="MeshInstance3D" parent="kvasoman"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1.6, 0)
-cast_shadow = 0
 mesh = SubResource("ArrayMesh_coavb")
 skeleton = NodePath("")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.18374, 0)
-light_energy = 0.4
+light_energy = 0.2
+light_volumetric_fog_energy = 0.0
 shadow_enabled = true
 omni_range = 4.0
 omni_attenuation = 0.4

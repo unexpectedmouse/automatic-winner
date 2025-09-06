@@ -1,27 +1,36 @@
-[gd_scene load_steps=14 format=3 uid="uid://ee3oeo2rgbtt"]
+[gd_scene load_steps=15 format=3 uid="uid://ee3oeo2rgbtt"]
 
 [ext_resource type="Script" uid="uid://dun6wdaffv7tw" path="res://scripts/world.gd" id="1_qfnet"]
 [ext_resource type="Script" uid="uid://cusrq0gx70jxc" path="res://scripts/world_environment.gd" id="2_71j4m"]
 [ext_resource type="PackedScene" uid="uid://iyvykwc3myjp" path="res://scenes/map.tscn" id="2_k0juu"]
 [ext_resource type="PackedScene" uid="uid://ouafcdtt3cjh" path="res://scenes/tasks/cleaning_task.tscn" id="3_4mrxx"]
 [ext_resource type="PackedScene" uid="uid://oafn2ku32rqj" path="res://scenes/tasks/light_task.tscn" id="3_i7141"]
+[ext_resource type="PackedScene" uid="uid://cvic1gvelljwr" path="res://scenes/tasks/tea_task.tscn" id="4_7r4gi"]
 [ext_resource type="Script" uid="uid://dr17g88rn4t1t" path="res://scripts/charge_light.gd" id="5_71j4m"]
 [ext_resource type="Script" uid="uid://db12ko1jwcn41" path="res://scripts/charge_kvas.gd" id="5_qfnet"]
-
-[sub_resource type="Sky" id="Sky_71j4m"]
+[ext_resource type="ArrayOccluder3D" uid="uid://4pru1gmil06x" path="res://scenes/occlusion/world.occ" id="8_4mrxx"]
 
 [sub_resource type="Environment" id="Environment_qfnet"]
 background_mode = 1
-sky = SubResource("Sky_71j4m")
+background_color = Color(0.0295066, 0.0295066, 0.0295065, 1)
 tonemap_mode = 2
 tonemap_white = 2.0
 glow_enabled = true
+glow_normalized = true
 glow_intensity = 0.35
 glow_strength = 1.19
-glow_bloom = 0.5
+glow_bloom = 0.2
+glow_blend_mode = 0
 fog_enabled = true
-fog_light_color = Color(0.0477043, 0.0576729, 0.0679132, 1)
-volumetric_fog_enabled = true
+fog_light_color = Color(0.109221, 0.11214, 0.109926, 1)
+fog_density = 0.03
+fog_depth_curve = 0.517633
+fog_depth_begin = -17.5
+fog_depth_end = 179.0
+adjustment_enabled = true
+adjustment_brightness = 1.2
+adjustment_contrast = 0.95
+adjustment_saturation = 0.8
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_k0juu"]
 
@@ -43,8 +52,8 @@ emission = Color(0.403628, 0.224105, 0, 1)
 
 [node name="World" type="Node3D" node_paths=PackedStringArray("random_positions")]
 script = ExtResource("1_qfnet")
-tasks_scenes = Array[PackedScene]([ExtResource("3_4mrxx"), ExtResource("3_i7141")])
-random_positions = [NodePath("map/MAP/rooms/room"), NodePath("map/MAP/rooms/room2"), NodePath("map/MAP/rooms/room3"), NodePath("map/MAP/rooms/room4"), NodePath("map/MAP/rooms/room5")]
+tasks_scenes = Array[PackedScene]([ExtResource("3_4mrxx"), ExtResource("3_i7141"), ExtResource("4_7r4gi")])
+random_positions = [NodePath("map/MAP/rooms/room"), NodePath("map/MAP/rooms/room2"), NodePath("map/MAP/rooms/room3"), NodePath("map/MAP/rooms/room4"), NodePath("map/MAP/rooms/room5"), NodePath("map/MAP/rooms/room6"), NodePath("map/MAP/rooms/room7"), NodePath("map/MAP/rooms/room8"), NodePath("map/MAP/rooms/room9"), NodePath("map/MAP/rooms/room10"), NodePath("map/MAP/rooms/room11"), NodePath("map/MAP/rooms/room12"), NodePath("map/MAP/rooms/room13"), NodePath("map/MAP/rooms/room14"), NodePath("map/MAP/rooms/room15"), NodePath("map/MAP/rooms/room16"), NodePath("map/MAP/rooms/room17"), NodePath("map/MAP/rooms/room18"), NodePath("map/MAP/rooms/room19"), NodePath("map/MAP/rooms/room20"), NodePath("map/MAP/rooms/room21"), NodePath("map/MAP/rooms/room22"), NodePath("map/MAP/rooms/room23"), NodePath("map/MAP/rooms/room24"), NodePath("map/MAP/rooms/room25"), NodePath("map/MAP/rooms/room26"), NodePath("map/MAP/rooms/room27"), NodePath("map/MAP/rooms/room28")]
 
 [node name="ColorRect" type="ColorRect" parent="."]
 anchors_preset = 8
@@ -208,6 +217,9 @@ grow_vertical = 2
 [node name="players_alive_label" type="Label" parent="."]
 offset_right = 40.0
 offset_bottom = 23.0
+
+[node name="OccluderInstance3D" type="OccluderInstance3D" parent="."]
+occluder = ExtResource("8_4mrxx")
 
 [connection signal="body_entered" from="charge_light" to="charge_light" method="_on_body_entered"]
 [connection signal="body_entered" from="charge_kvas" to="charge_kvas" method="_on_body_entered"]

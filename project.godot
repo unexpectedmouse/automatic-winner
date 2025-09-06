@@ -45,6 +45,9 @@ lightcardswitch=""
 towel=""
 shaverma=""
 kreker=""
+water_cooler=""
+cup=""
+tea_pocket=""
 
 [input]
 
@@ -101,6 +104,9 @@ click={
 
 [rendering]
 
+environment/volumetric_fog/volume_size=128
+environment/volumetric_fog/volume_depth=128
+occlusion_culling/use_occlusion_culling=true
 throw={
 "deadzone": 0.2,
 "events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":1,"position":Vector2(473, 19),"global_position":Vector2(482, 67),"factor":1.0,"button_index":1,"canceled":false,"pressed":true,"double_click":false,"script":null)

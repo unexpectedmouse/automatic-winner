@@ -132,7 +132,6 @@ func task_completed(task_name:String, destroy:bool):
 func select_task():
 	place_task.rpc(randi_range(0, tasks_scenes.size()) - 1, random_positions.pick_random().global_transform)
 
-
 @rpc("any_peer", "call_local")
 func place_task(index: int, _position: Transform3D):
 	var task: Node3D = tasks_scenes[index].instantiate()

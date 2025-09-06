@@ -30,7 +30,7 @@ var has_player = false
 func update_players_alive():
 	for player:CharacterBody3D in world.get_node('players').get_children():
 		if player.is_in_group('player'):
-			players_alive += 1	
+			players_alive += 1
 	world.get_node('players_alive_label').text = 'В живых: '+str(players_alive)
 	set_label.rpc()
 
